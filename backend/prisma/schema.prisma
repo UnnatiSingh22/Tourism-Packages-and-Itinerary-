@@ -1,0 +1,365 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  users        User[]
+  packages     TourPackage[]
+  departures   Departure[]
+  travelers    Traveler[]
+  suppliers    Supplier[]
+  vouchers     Voucher[]
+  rules        AutomationRule[]
+  logs         AutomationLog[]
+  auditTrails  AuditTrail[]
+
+  @@map("tenants")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  tenantId  String
+  email     String   @unique
+  password  String
+  role      String   // tour_manager, ticketing_exec, finance_mgr
+  isDeleted Boolean  @default(false)
+  deletedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@map("users")
+}
+
+model TourPackage {
+  id          String   @id @default(uuid())
+  tenantId    String
+  code        String   @unique // uppercase alphanumeric, e.g. "PKG-123"
+  name        String
+  description String
+  category    String
+  duration    Int      // duration 1-90
+  basePrice   Decimal  // basePrice > 0
+  status      String   // DRAFT, PENDING_APPROVAL, PUBLISHED, ARCHIVED
+  isDeleted   Boolean  @default(false)
+  deletedAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   String?
+  updatedBy   String?
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  itineraryDays ItineraryDay[]
+  pricing     PackagePricing?
+  departures  Departure[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("tour_packages")
+}
+
+model ItineraryDay {
+  id           String   @id @default(uuid())
+  tenantId     String
+  packageId    String
+  dayNumber    Int      // unique day number per package
+  title        String
+  description  String
+  accommodation String?
+  hotelCheckIn  DateTime?
+  hotelCheckOut DateTime?
+  isDeleted    Boolean  @default(false)
+  deletedAt    DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  package      TourPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  activities   ItineraryActivity[]
+
+  @@unique([packageId, dayNumber])
+  @@index([packageId])
+  @@map("itinerary_days")
+}
+
+model ItineraryActivity {
+  id           String   @id @default(uuid())
+  tenantId     String
+  dayId        String
+  title        String
+  description  String?
+  startTime    DateTime?
+  endTime      DateTime?
+  location     String?
+  supplierId   String?  // for resource double-booking check
+  isDeleted    Boolean  @default(false)
+  deletedAt    DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  day          ItineraryDay @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  supplier     Supplier?    @relation(fields: [supplierId], references: [id])
+
+  @@index([dayId])
+  @@map("itinerary_activities")
+}
+
+model PackagePricing {
+  id                 String   @id @default(uuid())
+  tenantId           String
+  packageId          String   @unique
+  marginPerPax       Decimal  @default(0)
+  seasonalAdjustment Decimal  @default(0)
+  addOnsTotal        Decimal  @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  package            TourPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+
+  @@map("package_pricing")
+}
+
+model Departure {
+  id                String   @id @default(uuid())
+  tenantId          String
+  packageId         String
+  name              String
+  startDate         DateTime
+  endDate           DateTime
+  capacity          Int
+  availableCapacity Int
+  status            String   // ACTIVE, CLOSED, COMPLETED
+  isDeleted         Boolean  @default(false)
+  deletedAt         DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  tenant            Tenant   @relation(fields: [tenantId], references: [id])
+  package           TourPackage @relation(fields: [packageId], references: [id])
+  travelers         Traveler[]
+  allocations       DepartureAllocation[]
+  costSheetItems    CostSheetItem[]
+  waitlist          DepartureWaitlist[]
+  vouchers          Voucher[]
+
+  @@index([tenantId])
+  @@index([packageId])
+  @@map("departures")
+}
+
+model DepartureWaitlist {
+  id          String   @id @default(uuid())
+  tenantId    String
+  departureId String
+  travelerId  String
+  priority    Int
+  status      String   // PENDING, PROMOTED, CANCELLED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  departure   Departure @relation(fields: [departureId], references: [id], onDelete: Cascade)
+  traveler    Traveler  @relation(fields: [travelerId], references: [id], onDelete: Cascade)
+
+  @@index([departureId])
+  @@index([travelerId])
+  @@map("departure_waitlist")
+}
+
+model Traveler {
+  id               String   @id @default(uuid())
+  tenantId         String
+  departureId      String?
+  firstName        String
+  lastName         String
+  email            String
+  phone            String   // E164 phone
+  passportNumber   String
+  passportExpiry   DateTime
+  nationality      String   // ISO nationality
+  visaStatus       String?  // clear, blocked, pending
+  complianceStatus String   // clear, blocked
+  status           String   // BOOKED, CANCELLED, PENDING
+  refundAmount     Decimal?
+  isDeleted        Boolean  @default(false)
+  deletedAt        DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  tenant           Tenant   @relation(fields: [tenantId], references: [id])
+  departure        Departure? @relation(fields: [departureId], references: [id])
+  vouchers         Voucher[]
+  waitlist         DepartureWaitlist[]
+  documents        TravelerDocument[]
+
+  @@index([tenantId])
+  @@index([departureId])
+  @@map("travelers")
+}
+
+model TravelerDocument {
+  id           String   @id @default(uuid())
+  tenantId     String
+  travelerId   String
+  fileName     String
+  fileUrl      String
+  documentType String   // passport, visa
+  createdAt    DateTime @default(now())
+
+  traveler     Traveler @relation(fields: [travelerId], references: [id], onDelete: Cascade)
+
+  @@index([travelerId])
+  @@map("traveler_documents")
+}
+
+model Supplier {
+  id          String   @id @default(uuid())
+  tenantId    String
+  name        String
+  email       String
+  phone       String
+  status      String   // ACTIVE, INACTIVE
+  isDeleted   Boolean  @default(false)
+  deletedAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  contracts   SupplierContract[]
+  allocations DepartureAllocation[]
+  activities  ItineraryActivity[]
+
+  @@index([tenantId])
+  @@map("suppliers")
+}
+
+model SupplierContract {
+  id             String   @id @default(uuid())
+  tenantId       String
+  supplierId     String
+  contractNumber String
+  startDate      DateTime
+  endDate        DateTime
+  status         String   // ACTIVE, EXPIRED, TERMINATED
+  terms          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  supplier       Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  allocations    DepartureAllocation[]
+
+  @@index([supplierId])
+  @@map("supplier_contracts")
+}
+
+model DepartureAllocation {
+  id           String   @id @default(uuid())
+  tenantId     String
+  departureId  String
+  supplierId   String
+  contractId   String
+  resourceType String   // HOTEL, TRANSPORT, GUIDE
+  quantity     Int
+  status       String   // PENDING, CONFIRMED, REJECTED
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  departure    Departure @relation(fields: [departureId], references: [id], onDelete: Cascade)
+  supplier     Supplier  @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  contract     SupplierContract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  @@index([departureId])
+  @@index([supplierId])
+  @@map("departure_allocations")
+}
+
+model CostSheetItem {
+  id          String   @id @default(uuid())
+  tenantId    String
+  departureId String
+  itemType    String   // SUPPLIER_COST, OPERATIONS_OVERHEAD, TAX
+  description String
+  amount      Decimal
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  departure   Departure @relation(fields: [departureId], references: [id], onDelete: Cascade)
+
+  @@index([departureId])
+  @@map("cost_sheet_items")
+}
+
+model Voucher {
+  id          String   @id @default(uuid())
+  tenantId    String
+  travelerId  String
+  departureId String
+  voucherCode String   @unique
+  status      String   // ISSUED, REDEEMED, CANCELLED
+  details     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  traveler    Traveler @relation(fields: [travelerId], references: [id], onDelete: Cascade)
+  departure   Departure @relation(fields: [departureId], references: [id], onDelete: Cascade)
+
+  @@index([travelerId])
+  @@index([departureId])
+  @@map("vouchers")
+}
+
+model AutomationRule {
+  id          String   @id @default(uuid())
+  tenantId    String
+  name        String
+  triggerType String   // DEPARTURE_CUTOFF, PASSPORT_EXPIRY, WAITLIST_PROMOTION, AUTOMATION_EXECUTION
+  actionType  String   // EMAIL, CLOSE_DEPARTURE, PROMOTE_TRAVELER
+  conditions  Json?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@map("automation_rules")
+}
+
+model AutomationLog {
+  id         String   @id @default(uuid())
+  tenantId   String
+  ruleId     String
+  status     String   // SUCCESS, FAILED
+  message    String?
+  executedAt DateTime @default(now())
+
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@map("automation_logs")
+}
+
+model AuditTrail {
+  id         String   @id @default(uuid())
+  tenantId   String
+  userId     String
+  action     String
+  entityName String
+  entityId   String
+  oldValues  Json?
+  newValues  Json?
+  timestamp  DateTime @default(now())
+
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@map("audit_trail")
+}
