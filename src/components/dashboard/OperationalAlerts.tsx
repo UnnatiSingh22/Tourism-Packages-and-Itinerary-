@@ -60,7 +60,7 @@ const INITIAL_ALERTS: AlertItem[] = [
     time: '2 hours ago',
     message: 'Engine radiator overheat detected near Ajmer. Replacement luxury sprinter bus dispatched from Jaipur depot.',
     status: 'Active',
-    region: 'Asia',
+    region: 'Rajasthan',
     icon: Truck
   },
   {
@@ -76,11 +76,11 @@ const INITIAL_ALERTS: AlertItem[] = [
   {
     id: 7,
     type: 'Emergency Incident',
-    title: 'Emergency: Flash Flood Road Damage',
+    title: 'Emergency: Landslide near Sonmarg',
     time: '30 mins ago',
-    message: 'Sudden rain washed out section of Highway 9 in Himachal. Local authorities coordinating emergency rerouting.',
+    message: 'Sudden landslide blocked section of Highway 1D near Sonmarg. Local authorities coordinating emergency rerouting.',
     status: 'Active',
-    region: 'Asia',
+    region: 'Kashmir',
     icon: ShieldAlert
   },
   {
@@ -100,7 +100,7 @@ const INITIAL_ALERTS: AlertItem[] = [
     time: '10 mins ago',
     message: 'Guest reported acute allergy symptoms. Ambulance dispatched. Hotel manager Elena R. accompanying to clinic.',
     status: 'Active',
-    region: 'Middle East',
+    region: 'Dubai',
     icon: BriefcaseMedical
   },
   {
@@ -110,28 +110,108 @@ const INITIAL_ALERTS: AlertItem[] = [
     time: '1 hour ago',
     message: 'High winds and zero visibility. Desert safari tours paused for 4 hours. Guests redirected to Palm Lounge.',
     status: 'Active',
-    region: 'Middle East',
+    region: 'Dubai',
     icon: AlertCircle
   },
   {
     id: 11,
     type: 'Flight Delay',
-    title: 'Flight Delay: Air India AI-101 Delhi',
+    title: 'Flight Delay: Delhi to Jaipur flight',
     time: '12 mins ago',
-    message: 'Fog delay at IGI Airport. Flight departure deferred by 2 hours. VIP lounge lounge access activated.',
+    message: 'Fog delay at IGI Airport. Flight departure deferred by 2 hours. VIP lounge access activated.',
     status: 'Active',
-    region: 'India',
+    region: 'Rajasthan',
     icon: AlertTriangle
   },
   {
     id: 12,
     type: 'Heavy Traffic',
-    title: 'Heavy Traffic: Old Delhi Spice Market Tour',
+    title: 'Heavy Traffic: Jaipur City Palace entrance',
     time: '1 hour ago',
-    message: 'Gridlock congestion. Pedestrian walk circuit modified. Directing travelers to Lal Qila parking.',
+    message: 'Gridlock congestion. Pedestrian walk circuit modified. Directing travelers to Hawa Mahal parking.',
     status: 'Active',
-    region: 'India',
+    region: 'Rajasthan',
     icon: Clock
+  },
+  {
+    id: 13,
+    type: 'Weather Warning',
+    title: 'Weather Warning: High Swells Vembanad Lake',
+    time: '25 mins ago',
+    message: 'Monsoon high waves reported on Vembanad Lake. Houseboat cruises suspended. Guests redirected to Kumarakom resort wellness spa.',
+    status: 'Active',
+    region: 'Kerala',
+    icon: AlertCircle
+  },
+  {
+    id: 14,
+    type: 'Emergency Incident',
+    title: 'Emergency: Houseboat Engine Overheat',
+    time: '40 mins ago',
+    message: 'Houseboat K-12 experienced minor engine cutoff near Alappuzha. Speedboat dispatch completed, guests transferred.',
+    status: 'Active',
+    region: 'Kerala',
+    icon: ShieldAlert
+  },
+  {
+    id: 15,
+    type: 'Weather Warning',
+    title: 'Weather Warning: Mt. Agung Volcanic Ash alert',
+    time: '2 hours ago',
+    message: 'Minor ash emission detected. Outskirt trekking trails closed. Coastal excursions running as scheduled.',
+    status: 'Active',
+    region: 'Bali',
+    icon: AlertCircle
+  },
+  {
+    id: 16,
+    type: 'Road Closure',
+    title: 'Road Closure: Ubud monkey forest bypass',
+    time: '1 hour ago',
+    message: 'Local religious procession blocking Ubud central bypass. Tour coaches rerouted via Denpasar highway.',
+    status: 'Active',
+    region: 'Bali',
+    icon: AlertTriangle
+  },
+  {
+    id: 17,
+    type: 'Staff Shortage',
+    title: 'Staff Shortage: Somnath temple guide',
+    time: '5 mins ago',
+    message: 'Lead guide reported flat tire. Backup coordinator Ramesh Patel dispatched to lead the museum circuit.',
+    status: 'Active',
+    region: 'Rajkot',
+    icon: Users
+  },
+  {
+    id: 18,
+    type: 'Heavy Traffic',
+    title: 'Heavy Traffic: Kalavad Road gridlock',
+    time: '3 hours ago',
+    message: 'Heavy festival traffic near Rajkot Ring Road. Transfer vehicles redirected through Gondal highway bypass.',
+    status: 'Active',
+    region: 'Rajkot',
+    icon: Clock
+  },
+  {
+    id: 19,
+    type: 'Weather Warning',
+    title: 'Weather Warning: Dudhsagar waterfall swells',
+    time: '15 mins ago',
+    message: 'High flow rates near waterfalls. Trekking path closed by forest department. Inland temple fallback activated.',
+    status: 'Active',
+    region: 'Goa',
+    icon: AlertCircle
+  },
+  {
+    id: 20,
+    type: 'Hotel Overbooking',
+    title: 'Hotel Overbooking: W Goa Resort',
+    time: '2 hours ago',
+    message: 'Ocean Villa overbooked. VIP guests upgraded to Private Pool Chalet with complimentary spa package.',
+    status: 'Active',
+    region: 'Goa',
+    icon: Home
   }
 ];
 

@@ -12,8 +12,13 @@ const REGIONAL_WEATHER = {
   Europe: { temp: '19°C', condition: 'Light Rain', humidity: '78%', wind: '18 km/h', icon: CloudRain },
   Asia: { temp: '27°C', condition: 'Sunny', humidity: '44%', wind: '8 km/h', icon: Sun },
   Americas: { temp: '21°C', condition: 'Windy', humidity: '50%', wind: '28 km/h', icon: Wind },
-  'Middle East': { temp: '38°C', condition: 'Clear', humidity: '18%', wind: '14 km/h', icon: Sun },
-  India: { temp: '30°C', condition: 'Monsoon Showers', humidity: '92%', wind: '20 km/h', icon: CloudRain },
+  Goa: { temp: '28°C', condition: 'Sunny Coast', humidity: '80%', wind: '10 km/h', icon: Sun },
+  Rajasthan: { temp: '35°C', condition: 'Hot & Dry', humidity: '25%', wind: '12 km/h', icon: Sun },
+  Rajkot: { temp: '31°C', condition: 'Warm & Breezy', humidity: '40%', wind: '14 km/h', icon: CloudSun },
+  Kashmir: { temp: '14°C', condition: 'Cool & Clear', humidity: '65%', wind: '6 km/h', icon: CloudSun },
+  Kerala: { temp: '29°C', condition: 'Humid Showers', humidity: '92%', wind: '18 km/h', icon: CloudRain },
+  Bali: { temp: '29°C', condition: 'Tropical Clear', humidity: '75%', wind: '8 km/h', icon: Sun },
+  Dubai: { temp: '38°C', condition: 'Desert Heat', humidity: '15%', wind: '14 km/h', icon: Sun }
 };
 
 const REGIONAL_RESOURCES = {
@@ -21,31 +26,57 @@ const REGIONAL_RESOURCES = {
   Europe: { guides: 8, vehicles: 12, coordinators: 2 },
   Asia: { guides: 6, vehicles: 10, coordinators: 2 },
   Americas: { guides: 4, vehicles: 8, coordinators: 1 },
-  'Middle East': { guides: 2, vehicles: 6, coordinators: 1 },
-  India: { guides: 2, vehicles: 6, coordinators: 1 },
+  Goa: { guides: 12, vehicles: 22, coordinators: 3 },
+  Rajasthan: { guides: 22, vehicles: 38, coordinators: 5 },
+  Rajkot: { guides: 8, vehicles: 12, coordinators: 2 },
+  Kashmir: { guides: 15, vehicles: 24, coordinators: 4 },
+  Kerala: { guides: 14, vehicles: 28, coordinators: 4 },
+  Bali: { guides: 16, vehicles: 30, coordinators: 3 },
+  Dubai: { guides: 18, vehicles: 35, coordinators: 4 }
 };
 
 const REGIONAL_TOURS = {
   All: [
-    { id: 't-1', name: 'Iconic Rajasthan', days: 'Day 4 of 12', pax: 22, image: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=100&h=100&fit=crop', status: 'On Track', region: 'India', manager: 'Sarah Wu' },
-    { id: 't-2', name: 'Parisian Nights', days: 'Day 2 of 5', pax: 14, image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=100&h=100&fit=crop', status: 'Slowed', region: 'Europe', manager: 'David Chen' },
+    { id: 't-1', name: 'Jaipur Fort Palace Tour', days: 'Day 4 of 12', pax: 22, image: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=100&h=100&fit=crop', status: 'On Track', region: 'Rajasthan', manager: 'Sarah Wu' },
+    { id: 't-2', name: 'Parisian Nights Tour', days: 'Day 2 of 5', pax: 14, image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=100&h=100&fit=crop', status: 'Slowed', region: 'Europe', manager: 'David Chen' },
     { id: 't-3', name: 'Kyoto Sakura Trail', days: 'Day 6 of 8', pax: 18, image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=100&h=100&fit=crop', status: 'On Track', region: 'Asia', manager: 'Kenji Tanaka' },
     { id: 't-4', name: 'Broadway VIP Circuit', days: 'Day 3 of 4', pax: 12, image: 'https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=100&h=100&fit=crop', status: 'On Track', region: 'Americas', manager: 'Jordan Smith' },
+    { id: 't-5', name: 'North Goa Heritage Beaches', days: 'Day 2 of 4', pax: 15, image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=100&h=100&fit=crop', status: 'On Track', region: 'Goa', manager: 'Amit Sen' },
+    { id: 't-6', name: 'Srinagar Dal Lake Shikara', days: 'Day 3 of 6', pax: 10, image: 'https://images.unsplash.com/photo-1595818949504-7cef541a404f?w=100&h=100&fit=crop', status: 'On Track', region: 'Kashmir', manager: 'Rahul Raina' },
+    { id: 't-7', name: 'Kerala Houseboat Cruise', days: 'Day 2 of 3', pax: 8, image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=100&h=100&fit=crop', status: 'On Track', region: 'Kerala', manager: 'Devi Nair' },
+    { id: 't-8', name: 'Ubud Rice Terraces Excursion', days: 'Day 4 of 6', pax: 18, image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=100&h=100&fit=crop', status: 'On Track', region: 'Bali', manager: 'Made Putu' },
+    { id: 't-9', name: 'Burj Khalifa Sky Deck Experience', days: 'Day 1 of 3', pax: 20, image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=100&h=100&fit=crop', status: 'On Track', region: 'Dubai', manager: 'Elena Rodriguez' },
+    { id: 't-10', name: 'Watson Museum Circuit', days: 'Day 1 of 2', pax: 6, image: 'https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=100&h=100&fit=crop', status: 'On Track', region: 'Rajkot', manager: 'Ramesh Patel' }
   ],
   Europe: [
-    { id: 't-2', name: 'Parisian Nights', days: 'Day 2 of 5', pax: 14, image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=100&h=100&fit=crop', status: 'Slowed', region: 'Europe', manager: 'David Chen' },
+    { id: 't-2', name: 'Parisian Nights Tour', days: 'Day 2 of 5', pax: 14, image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=100&h=100&fit=crop', status: 'Slowed', region: 'Europe', manager: 'David Chen' }
   ],
   Asia: [
-    { id: 't-3', name: 'Kyoto Sakura Trail', days: 'Day 6 of 8', pax: 18, image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=100&h=100&fit=crop', status: 'On Track', region: 'Asia', manager: 'Kenji Tanaka' },
+    { id: 't-3', name: 'Kyoto Sakura Trail', days: 'Day 6 of 8', pax: 18, image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=100&h=100&fit=crop', status: 'On Track', region: 'Asia', manager: 'Kenji Tanaka' }
   ],
   Americas: [
-    { id: 't-4', name: 'Broadway VIP Circuit', days: 'Day 3 of 4', pax: 12, image: 'https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=100&h=100&fit=crop', status: 'On Track', region: 'Americas', manager: 'Jordan Smith' },
+    { id: 't-4', name: 'Broadway VIP Circuit', days: 'Day 3 of 4', pax: 12, image: 'https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=100&h=100&fit=crop', status: 'On Track', region: 'Americas', manager: 'Jordan Smith' }
   ],
-  'Middle East': [
-    { id: 't-5', name: 'Desert Safari Deluxe', days: 'Day 1 of 3', pax: 8, image: 'https://images.unsplash.com/photo-1505080856163-26759dcd7d13?w=100&h=100&fit=crop', status: 'On Track', region: 'Middle East', manager: 'Elena Rodriguez' }
+  Goa: [
+    { id: 't-5', name: 'North Goa Heritage Beaches', days: 'Day 2 of 4', pax: 15, image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=100&h=100&fit=crop', status: 'On Track', region: 'Goa', manager: 'Amit Sen' }
   ],
-  India: [
-    { id: 't-1', name: 'Iconic Rajasthan', days: 'Day 4 of 12', pax: 22, image: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=100&h=100&fit=crop', status: 'On Track', region: 'India', manager: 'Sarah Wu' }
+  Kashmir: [
+    { id: 't-6', name: 'Srinagar Dal Lake Shikara', days: 'Day 3 of 6', pax: 10, image: 'https://images.unsplash.com/photo-1595818949504-7cef541a404f?w=100&h=100&fit=crop', status: 'On Track', region: 'Kashmir', manager: 'Rahul Raina' }
+  ],
+  Kerala: [
+    { id: 't-7', name: 'Kerala Houseboat Cruise', days: 'Day 2 of 3', pax: 8, image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=100&h=100&fit=crop', status: 'On Track', region: 'Kerala', manager: 'Devi Nair' }
+  ],
+  Bali: [
+    { id: 't-8', name: 'Ubud Rice Terraces Excursion', days: 'Day 4 of 6', pax: 18, image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=100&h=100&fit=crop', status: 'On Track', region: 'Bali', manager: 'Made Putu' }
+  ],
+  Dubai: [
+    { id: 't-9', name: 'Burj Khalifa Sky Deck Experience', days: 'Day 1 of 3', pax: 20, image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=100&h=100&fit=crop', status: 'On Track', region: 'Dubai', manager: 'Elena Rodriguez' }
+  ],
+  Rajasthan: [
+    { id: 't-1', name: 'Jaipur Fort Palace Tour', days: 'Day 4 of 12', pax: 22, image: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=100&h=100&fit=crop', status: 'On Track', region: 'Rajasthan', manager: 'Sarah Wu' }
+  ],
+  Rajkot: [
+    { id: 't-10', name: 'Watson Museum Circuit', days: 'Day 1 of 2', pax: 6, image: 'https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=100&h=100&fit=crop', status: 'On Track', region: 'Rajkot', manager: 'Ramesh Patel' }
   ]
 };
 

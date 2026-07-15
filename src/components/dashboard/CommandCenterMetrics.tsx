@@ -6,7 +6,14 @@ export function CommandCenterMetrics({ selectedRegion = 'All' }: { selectedRegio
     All: { travelers: '1,284', tours: '42', departures: '08', tasks: '16' },
     Europe: { travelers: '642', tours: '21', departures: '04', tasks: '08' },
     Asia: { travelers: '412', tours: '14', departures: '03', tasks: '05' },
-    Americas: { travelers: '230', tours: '07', departures: '01', tasks: '03' }
+    Americas: { travelers: '230', tours: '07', departures: '01', tasks: '03' },
+    Goa: { travelers: '384', tours: '12', departures: '03', tasks: '04' },
+    Rajasthan: { travelers: '410', tours: '15', departures: '04', tasks: '05' },
+    Rajkot: { travelers: '120', tours: '05', departures: '01', tasks: '02' },
+    Kashmir: { travelers: '290', tours: '08', departures: '02', tasks: '03' },
+    Kerala: { travelers: '310', tours: '10', departures: '02', tasks: '04' },
+    Bali: { travelers: '440', tours: '14', departures: '03', tasks: '05' },
+    Dubai: { travelers: '520', tours: '18', departures: '04', tasks: '06' }
   };
 
   const current = metricsData[selectedRegion as keyof typeof metricsData] || metricsData.All;

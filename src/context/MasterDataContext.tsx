@@ -176,7 +176,10 @@ const defaultState: MasterDataState = {
     { id: 'reg-jp', name: 'Japan', status: 'Active' },
     { id: 'reg-ama', name: 'Amalfi Coast', status: 'Active' },
     { id: 'reg-ice', name: 'Iceland', status: 'Active' },
-    { id: 'reg-bali', name: 'Bali', status: 'Active' }
+    { id: 'reg-bali', name: 'Bali', status: 'Active' },
+    { id: 'reg-ker', name: 'Kerala', status: 'Active' },
+    { id: 'reg-kas', name: 'Kashmir', status: 'Active' },
+    { id: 'reg-dub', name: 'Dubai', status: 'Active' }
   ],
   cruises: [
     {
